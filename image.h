@@ -1,7 +1,6 @@
 #pragma once
 #include <cstdint>
 #include <iostream>
-#include "ipixelprocessor.h"
 #include <functional>
 
 class Image {
@@ -13,18 +12,11 @@ public:
 		std::cout << "freeing pixel memory.\n";
 		delete[] pixels;
 	}
+
 	bool imageSizeIsValid() {
 		return m_rows <= 1024 && m_columns <= 1024;
 	}
-	void pixelRunner(IPixelProcessor* pixelProcessor) {
-		std::cout << "-- pixelRunner: interface version\n";
-		for (int x = 0; x < m_rows; x++) {
-			for (int y = 0; y < m_columns; y++) {
-				int pixelIndex = x * m_columns + y;
-				pixels[pixelIndex] = pixelProcessor->processPixel(pixels[pixelIndex], x, y);
-			}
-		}
-	}
+
 	void pixelRunner(std::function<uint8_t(uint8_t, int, int)> pixelProcessor) {
 		std::cout << "-- pixelRunner: lambda version\n";
 		for (int x = 0; x < m_rows; x++) {
